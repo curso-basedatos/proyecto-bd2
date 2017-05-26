@@ -4,7 +4,7 @@
  * and open the template in the editor.
  */
 
-package proyecto.bd2;
+package proyecto.bd2.modelo;
 
 /**
  *

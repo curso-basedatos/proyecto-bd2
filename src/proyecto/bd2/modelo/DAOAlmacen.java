@@ -6,6 +6,7 @@
 package proyecto.bd2.modelo;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,6 +28,21 @@ public class DAOAlmacen {
         System.out.println("Se guarado el almacen");
         con.close();
        
+  }
+  public ArrayList<Almacen> obtenerTodos()throws Exception{
+    Connection con=  Conexion.conectarse();
+              ArrayList<Almacen> almacenes=new ArrayList<>();
+   Statement st= con.createStatement();
+ ResultSet res=st.executeQuery("SELECT * FROM ALMACEN");
+ while(res.next()){
+   Integer numeroAlmacen=  res.getInt(1);
+   String nombreAlmacen=res.getString(2);
+    Almacen almacen=new Almacen(numeroAlmacen, nombreAlmacen);
+   almacenes.add(almacen);
+   
+     }
+ con.close();
+ return almacenes;
   }
     
     

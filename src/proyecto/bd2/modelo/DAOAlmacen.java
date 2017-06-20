@@ -16,8 +16,9 @@ public class DAOAlmacen {
     
     
     //Primera Operacion
-  public void guardar(Almacen almacen)throws Exception{
+  public static void guardar(Almacen almacen)throws Exception{
        Connection con=Conexion.conectarse();
+       try{
         
         CallableStatement callate=con.prepareCall("{call guardar_almacen(?,?)}");
         callate.setInt(1, almacen.getNumeroAlmacen());
@@ -26,30 +27,51 @@ public class DAOAlmacen {
         callate.execute();
       //  int pk=callate.getInt(1);
         System.out.println("Se guarado el almacen");
-        con.close();
+        callate.close();
+       }catch(Exception e){
+           
+       }
+        finally{
+           con.close();
+       }
        
   }
   
   //Actualizar
     //Primera Operacion
-  public void actualizar(Almacen almacen)throws Exception{
-       Connection con=Conexion.conectarse();
+  public static void actualizar(Almacen almacen) throws SQLException{
+      Connection con=null;
+      CallableStatement callate=null;
+      try{
+       con=Conexion.conectarse();
         
-        CallableStatement callate=con.prepareCall("{call actualizar_almacen(?,?)}");
+         callate=con.prepareCall("{call ACTUALIZAR_ALMACEN(?,?)}");
+        System.out.println("numeeo almacen "+almacen.getNumeroAlmacen());
+         System.out.println("nombe almacen "+almacen.getUbicacionAlmacen());
         callate.setInt(1, almacen.getNumeroAlmacen());
         callate.setString(2,almacen.getUbicacionAlmacen());
 
-        callate.execute();
+        callate.executeUpdate();
+        callate.close();
       //  int pk=callate.getInt(1);
         System.out.println("Se actualizó el almacen");
-        con.close();
+        
+      }catch(Exception e){
+          System.out.println("La excepcion es "+e.getMessage());
+      }
+      finally{
+          con.close();
+          callate.close();
+      }
        
   }
   
   //Obtener todos
-  public ArrayList<Almacen> obtenerTodos()throws Exception{
+  public static ArrayList<Almacen> obtenerTodos()throws Exception{
     Connection con=  Conexion.conectarse();
-              ArrayList<Almacen> almacenes=new ArrayList<>();
+     ArrayList<Almacen> almacenes=new ArrayList<>();
+    try{
+             
    Statement st= con.createStatement();
  ResultSet res=st.executeQuery("SELECT * FROM ALMACEN");
  while(res.next()){
@@ -59,15 +81,26 @@ public class DAOAlmacen {
    almacenes.add(almacen);
    
      }
- con.close();
+ 
+    }catch(Exception e){
+        
+    }finally{
+      con.close();  
+    }
+ 
  return almacenes;
   }
   
   
   //Obtener pór id
-  public Almacen obtenerporId(Integer id)throws Exception{
-    Connection con=  Conexion.conectarse();
-             Almacen almacen=new Almacen();
+  public static Almacen obtenerporId(Integer id)throws Exception{
+     Almacen almacen=new Almacen();
+      Connection con=  Conexion.conectarse();
+            
+             try{
+                 
+             
+             
    Statement st= con.createStatement();
  ResultSet res=st.executeQuery("SELECT * FROM ALMACEN WHERE NUMERO_ALMACEN="+id);
  while(res.next()){
@@ -78,7 +111,12 @@ public class DAOAlmacen {
 
    
      }
- con.close();
+             }catch(Exception e){
+                 
+             }finally{
+                  con.close();
+             }
+
  return almacen;
   }
     

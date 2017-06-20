@@ -10,6 +10,8 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 import jdk.nashorn.internal.runtime.regexp.joni.exception.JOniException;
 import proyecto.bd2.modelo.Almacen;
 import proyecto.bd2.modelo.DAOAlmacen;
@@ -60,6 +62,9 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         actualizarAlmacen = new javax.swing.JButton();
         jPanel7 = new javax.swing.JPanel();
         jPanel8 = new javax.swing.JPanel();
+        jButton2 = new javax.swing.JButton();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        tablaAlmacenBusquedas = new javax.swing.JTable();
         jPanel9 = new javax.swing.JPanel();
         jPanel2 = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
@@ -147,7 +152,7 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(actualizarAlmacen)
-                .addContainerGap(238, Short.MAX_VALUE))
+                .addContainerGap(329, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Actulizar almacen", jPanel6);
@@ -165,15 +170,47 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
 
         jTabbedPane1.addTab("Buscar por numero", jPanel7);
 
+        jButton2.setText("Buscar Todos");
+        jButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton2ActionPerformed(evt);
+            }
+        });
+
+        tablaAlmacenBusquedas.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Numero de almacen", "Ubicacion"
+            }
+        ));
+        jScrollPane2.setViewportView(tablaAlmacenBusquedas);
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel8Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jButton2))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel8Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton2)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 227, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(207, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Buscar Todos", jPanel8);
@@ -214,7 +251,7 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
 
         asasassa.addTab("Vendedor", jPanel2);
@@ -227,7 +264,7 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
 
         asasassa.addTab("Cliente", jPanel3);
@@ -240,7 +277,7 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 409, Short.MAX_VALUE)
+            .addGap(0, 496, Short.MAX_VALUE)
         );
 
         asasassa.addTab("Ventas", jPanel4);
@@ -273,11 +310,12 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         DAOAlmacen dao=new DAOAlmacen();
         try {
          Almacen almacen=   dao.obtenerporId(Integer.parseInt(comboAlmacen.getSelectedItem().toString()));
+ 
          tablitaAlmacen1.setValueAt(almacen.getNumeroAlmacen(), 0, 0);
          tablitaAlmacen1.setValueAt(almacen.getUbicacionAlmacen(), 0, 1);
             
         } catch (Exception ex) {
-           
+           JOptionPane.showMessageDialog(this,ex.getMessage());
         }
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -285,8 +323,8 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         // TODO add your handling code here:
         
         //Actualizar Almacen
-    Integer numeroAlmacen=    (Integer) tablitaAlmacen1.getValueAt(0, 0);
-    String ubicacionAlmacen=(String) tablitaAlmacen1.getValueAt(0, 1);
+    Integer numeroAlmacen=    Integer.parseInt(tablitaAlmacen1.getValueAt(0, 0).toString());
+    String ubicacionAlmacen=tablitaAlmacen1.getValueAt(0, 1).toString();
     DAOAlmacen dao=new DAOAlmacen();
         try {
             dao.actualizar(new Almacen(numeroAlmacen, ubicacionAlmacen));
@@ -298,6 +336,24 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
         
         
     }//GEN-LAST:event_actualizarAlmacenActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        try {
+            // TODO add your handling code here:
+            ArrayList<Almacen> almacenes=   DAOAlmacen.obtenerTodos();
+            int indice=0;
+            //Cambiamos l modelo de la tabla:
+         DefaultTableModel model=   (DefaultTableModel) tablaAlmacenBusquedas.getModel();
+         model.setNumRows(almacenes.size());
+            for(Almacen al: almacenes){
+                tablaAlmacenBusquedas.setValueAt(al.getNumeroAlmacen(),indice ,0);
+                tablaAlmacenBusquedas.setValueAt(al.getUbicacionAlmacen(),indice ,1);
+                indice++;
+            }
+        } catch (Exception ex) {
+          
+        }
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -339,6 +395,7 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
     private javax.swing.JTabbedPane asasassa;
     private javax.swing.JComboBox<String> comboAlmacen;
     private javax.swing.JButton jButton1;
+    private javax.swing.JButton jButton2;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
@@ -351,7 +408,9 @@ public class FormularioAlmacenes extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTabbedPane jTabbedPane1;
+    private javax.swing.JTable tablaAlmacenBusquedas;
     private javax.swing.JTable tablitaAlmacen1;
     // End of variables declaration//GEN-END:variables
 

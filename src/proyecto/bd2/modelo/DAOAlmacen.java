@@ -29,6 +29,24 @@ public class DAOAlmacen {
         con.close();
        
   }
+  
+  //Actualizar
+    //Primera Operacion
+  public void actualizar(Almacen almacen)throws Exception{
+       Connection con=Conexion.conectarse();
+        
+        CallableStatement callate=con.prepareCall("{call actualizar_almacen(?,?)}");
+        callate.setInt(1, almacen.getNumeroAlmacen());
+        callate.setString(2,almacen.getUbicacionAlmacen());
+
+        callate.execute();
+      //  int pk=callate.getInt(1);
+        System.out.println("Se actualizó el almacen");
+        con.close();
+       
+  }
+  
+  //Obtener todos
   public ArrayList<Almacen> obtenerTodos()throws Exception{
     Connection con=  Conexion.conectarse();
               ArrayList<Almacen> almacenes=new ArrayList<>();
@@ -43,6 +61,25 @@ public class DAOAlmacen {
      }
  con.close();
  return almacenes;
+  }
+  
+  
+  //Obtener pór id
+  public Almacen obtenerporId(Integer id)throws Exception{
+    Connection con=  Conexion.conectarse();
+             Almacen almacen=new Almacen();
+   Statement st= con.createStatement();
+ ResultSet res=st.executeQuery("SELECT * FROM ALMACEN WHERE NUMERO_ALMACEN="+id);
+ while(res.next()){
+   Integer numeroAlmacen=  res.getInt(1);
+   String nombreAlmacen=res.getString(2);
+   almacen.setNumeroAlmacen(numeroAlmacen);
+   almacen.setUbicacionAlmacen(nombreAlmacen);
+
+   
+     }
+ con.close();
+ return almacen;
   }
     
     
